@@ -92,6 +92,37 @@ body {
   color: #cde2f8;
 }
 
+.verdict-summary {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.verdict-cause {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.checks {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.checks li {
+  margin-bottom: 6px;
+}
+
+.check-ok {
+  color: var(--ok);
+}
+
+.check-warning {
+  color: var(--warn);
+}
+
+.check-critical {
+  color: var(--critical);
+}
+
 .kv {
   display: grid;
   gap: 6px;
@@ -127,6 +158,47 @@ body {
 
 .table-wrap {
   overflow-x: auto;
+}
+
+.chart-wrap {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.chart-caption {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
 }
 
 table {

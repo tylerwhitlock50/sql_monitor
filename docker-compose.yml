@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sql_monitor}
+      POSTGRES_USER: ${POSTGRES_USER:-sql_monitor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sql_monitor}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sql_monitor} -d ${POSTGRES_DB:-sql_monitor}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  collector:
+    build:
+      context: .
+    image: sql-monitor:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_MODE: collector
+      SQLSERVER_CONN_STR: ${SQLSERVER_CONN_STR}
+      POSTGRES_CONN_STR: host=postgres port=5432 dbname=${POSTGRES_DB:-sql_monitor} user=${POSTGRES_USER:-sql_monitor} password=${POSTGRES_PASSWORD:-sql_monitor}
+      POLL_INTERVAL_SECONDS: ${POLL_INTERVAL_SECONDS:-15}
+      CAPTURE_BLOCKING: ${CAPTURE_BLOCKING:-1}
+      CAPTURE_QUERY_STATS: ${CAPTURE_QUERY_STATS:-1}
+      CAPTURE_HEALTH_COUNTERS: ${CAPTURE_HEALTH_COUNTERS:-1}
+      CAPTURE_XEVENTS: ${CAPTURE_XEVENTS:-1}
+      QUERY_STATS_TOP_N: ${QUERY_STATS_TOP_N:-50}
+      XEVENT_SESSION_NAME: ${XEVENT_SESSION_NAME:-sql_monitor_diag}
+      XEVENT_AUTO_CREATE_SESSION: ${XEVENT_AUTO_CREATE_SESSION:-1}
+
+  web:
+    image: sql-monitor:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_MODE: web
+      WEB_HOST: 0.0.0.0
+      WEB_PORT: 8000
+      POSTGRES_CONN_STR: host=postgres port=5432 dbname=${POSTGRES_DB:-sql_monitor} user=${POSTGRES_USER:-sql_monitor} password=${POSTGRES_PASSWORD:-sql_monitor}
+      DASHBOARD_STALE_MINUTES: ${DASHBOARD_STALE_MINUTES:-5}
+      DASHBOARD_AUTH_ENABLED: ${DASHBOARD_AUTH_ENABLED:-}
+      DASHBOARD_AUTH_USERNAME: ${DASHBOARD_AUTH_USERNAME:-}
+      DASHBOARD_AUTH_PASSWORD: ${DASHBOARD_AUTH_PASSWORD:-}
+    ports:
+      - "${WEB_BIND_PORT:-8000}:8000"
+
+volumes:
+  postgres_data:

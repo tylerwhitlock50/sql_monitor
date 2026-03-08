@@ -14,6 +14,13 @@
       <span id="overallStatus" class="pill">Unknown</span>
     </header>
 
+    <section class="card">
+      <h2>Operator Verdict</h2>
+      <p id="verdictSummary" class="verdict-summary">Evaluating...</p>
+      <ul id="verdictChecks" class="checks"></ul>
+      <p id="verdictCause" class="verdict-cause"></p>
+    </section>
+
     <section class="grid">
       <article class="card">
         <h2>Latest Attempt</h2>
@@ -49,7 +56,9 @@
     <section class="card">
       <h2>Timeseries (6h / 5m)</h2>
       <div id="timeseriesSummary" class="kv"></div>
-      <div id="timeseries" class="table-wrap"></div>
+      <div id="timeseries" class="chart-wrap"></div>
+      <div id="timeseriesLegend" class="chart-legend"></div>
+      <p id="timeseriesCaption" class="chart-caption"></p>
     </section>
   </main>
 
