@@ -19,9 +19,6 @@ services:
       context: .
     image: sql-monitor:latest
     restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       APP_MODE: collector
       SQLSERVER_CONN_STR: ${SQLSERVER_CONN_STR}
@@ -40,9 +37,6 @@ services:
       context: .
     image: sql-monitor:latest
     restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       APP_MODE: web
       WEB_HOST: 0.0.0.0
@@ -53,7 +47,7 @@ services:
       DASHBOARD_AUTH_USERNAME: ${DASHBOARD_AUTH_USERNAME:-}
       DASHBOARD_AUTH_PASSWORD: ${DASHBOARD_AUTH_PASSWORD:-}
     ports:
-      - "${WEB_BIND_PORT:-8000}:8000"
+      - "${WEB_BIND_PORT:-8123}:8000"
 
 volumes:
   postgres_data:
