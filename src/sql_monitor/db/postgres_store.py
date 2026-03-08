@@ -19,6 +19,15 @@ from ..sql_queries import (
 )
 
 
+def _sanitize_text(value):
+    """Remove NUL (0x00) from strings; PostgreSQL text cannot contain NUL."""
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return value.replace("\x00", "")
+    return value
+
+
 def insert_sqlserver_activity(pg_conn, rows):
     if not rows:
         return 0
@@ -31,27 +40,27 @@ def insert_sqlserver_activity(pg_conn, rows):
                 row.get("session_id"),
                 row.get("request_id"),
                 row.get("blocking_session_id"),
-                row.get("status"),
-                row.get("command"),
-                row.get("database_name"),
-                row.get("login_name"),
-                row.get("host_name"),
-                row.get("program_name"),
+                _sanitize_text(row.get("status")),
+                _sanitize_text(row.get("command")),
+                _sanitize_text(row.get("database_name")),
+                _sanitize_text(row.get("login_name")),
+                _sanitize_text(row.get("host_name")),
+                _sanitize_text(row.get("program_name")),
                 to_utc_if_naive(row.get("start_time")),
                 row.get("total_elapsed_ms"),
                 row.get("cpu_time_ms"),
                 row.get("logical_reads"),
                 row.get("reads"),
                 row.get("writes"),
-                row.get("wait_type"),
+                _sanitize_text(row.get("wait_type")),
                 row.get("wait_time_ms"),
-                row.get("wait_resource"),
+                _sanitize_text(row.get("wait_resource")),
                 row.get("open_transaction_count"),
-                row.get("object_schema"),
-                row.get("object_name"),
-                row.get("full_sql_text"),
-                row.get("statement_text"),
-                row.get("input_buffer"),
+                _sanitize_text(row.get("object_schema")),
+                _sanitize_text(row.get("object_name")),
+                _sanitize_text(row.get("full_sql_text")),
+                _sanitize_text(row.get("statement_text")),
+                _sanitize_text(row.get("input_buffer")),
             )
         )
 
@@ -74,23 +83,23 @@ def insert_sqlserver_blocking(pg_conn, rows):
                 row.get("waiting_request_id"),
                 row.get("blocking_session_id"),
                 row.get("blocking_request_id"),
-                row.get("wait_type"),
+                _sanitize_text(row.get("wait_type")),
                 row.get("wait_duration_ms"),
-                row.get("resource_description"),
-                row.get("waiting_status"),
-                row.get("waiting_command"),
-                row.get("waiting_database_name"),
-                row.get("waiting_login_name"),
-                row.get("waiting_host_name"),
-                row.get("waiting_program_name"),
-                row.get("waiting_statement_text"),
-                row.get("blocking_status"),
-                row.get("blocking_command"),
-                row.get("blocking_database_name"),
-                row.get("blocking_login_name"),
-                row.get("blocking_host_name"),
-                row.get("blocking_program_name"),
-                row.get("blocking_statement_text"),
+                _sanitize_text(row.get("resource_description")),
+                _sanitize_text(row.get("waiting_status")),
+                _sanitize_text(row.get("waiting_command")),
+                _sanitize_text(row.get("waiting_database_name")),
+                _sanitize_text(row.get("waiting_login_name")),
+                _sanitize_text(row.get("waiting_host_name")),
+                _sanitize_text(row.get("waiting_program_name")),
+                _sanitize_text(row.get("waiting_statement_text")),
+                _sanitize_text(row.get("blocking_status")),
+                _sanitize_text(row.get("blocking_command")),
+                _sanitize_text(row.get("blocking_database_name")),
+                _sanitize_text(row.get("blocking_login_name")),
+                _sanitize_text(row.get("blocking_host_name")),
+                _sanitize_text(row.get("blocking_program_name")),
+                _sanitize_text(row.get("blocking_statement_text")),
             )
         )
 
@@ -109,9 +118,9 @@ def insert_sqlserver_query_stats(pg_conn, rows):
         values.append(
             (
                 to_utc_if_naive(row.get("capture_time")),
-                row.get("database_name"),
-                row.get("object_schema"),
-                row.get("object_name"),
+                _sanitize_text(row.get("database_name")),
+                _sanitize_text(row.get("object_schema")),
+                _sanitize_text(row.get("object_name")),
                 row.get("execution_count"),
                 row.get("total_elapsed_ms"),
                 row.get("max_elapsed_ms"),
@@ -120,10 +129,10 @@ def insert_sqlserver_query_stats(pg_conn, rows):
                 row.get("total_logical_reads"),
                 row.get("total_physical_reads"),
                 to_utc_if_naive(row.get("last_execution_time")),
-                row.get("query_hash_hex"),
-                row.get("query_plan_hash_hex"),
-                row.get("full_sql_text"),
-                row.get("statement_text"),
+                _sanitize_text(row.get("query_hash_hex")),
+                _sanitize_text(row.get("query_plan_hash_hex")),
+                _sanitize_text(row.get("full_sql_text")),
+                _sanitize_text(row.get("statement_text")),
             )
         )
 
@@ -142,9 +151,9 @@ def insert_sqlserver_health_counters(pg_conn, rows):
         values.append(
             (
                 to_utc_if_naive(row.get("capture_time")),
-                row.get("object_name"),
-                row.get("counter_name"),
-                row.get("instance_name"),
+                _sanitize_text(row.get("object_name")),
+                _sanitize_text(row.get("counter_name")),
+                _sanitize_text(row.get("instance_name")),
                 row.get("cntr_type"),
                 row.get("cntr_value"),
             )
@@ -163,23 +172,23 @@ def insert_sqlserver_xevents(pg_conn, rows):
     values = []
     for row in rows:
         event_xml = row.get("event_xml")
-        event_xml_text = "" if event_xml is None else str(event_xml)
+        event_xml_text = "" if event_xml is None else _sanitize_text(str(event_xml))
         values.append(
             (
                 to_utc_if_naive(row.get("capture_time")),
                 to_utc_if_naive(row.get("event_time")),
-                row.get("event_name"),
+                _sanitize_text(row.get("event_name")),
                 row.get("session_id"),
-                row.get("database_name"),
-                row.get("client_app_name"),
-                row.get("client_hostname"),
-                row.get("username"),
+                _sanitize_text(row.get("database_name")),
+                _sanitize_text(row.get("client_app_name")),
+                _sanitize_text(row.get("client_hostname")),
+                _sanitize_text(row.get("username")),
                 row.get("error_number"),
                 row.get("severity"),
                 row.get("state"),
                 row.get("duration_ms"),
-                row.get("message"),
-                row.get("sql_text"),
+                _sanitize_text(row.get("message")),
+                _sanitize_text(row.get("sql_text")),
                 event_xml_text,
                 hash_xevent_record(row),
             )

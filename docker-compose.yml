@@ -25,7 +25,7 @@ services:
     environment:
       APP_MODE: collector
       SQLSERVER_CONN_STR: ${SQLSERVER_CONN_STR}
-      POSTGRES_CONN_STR: host=postgres port=5432 dbname=${POSTGRES_DB:-sql_monitor} user=${POSTGRES_USER:-sql_monitor} password=${POSTGRES_PASSWORD:-sql_monitor}
+      POSTGRES_CONN_STR: ${POSTGRES_CONN_STR:-host=postgres port=5432 dbname=sql_monitor user=sql_monitor password=sql_monitor}
       POLL_INTERVAL_SECONDS: ${POLL_INTERVAL_SECONDS:-15}
       CAPTURE_BLOCKING: ${CAPTURE_BLOCKING:-1}
       CAPTURE_QUERY_STATS: ${CAPTURE_QUERY_STATS:-1}
@@ -36,6 +36,8 @@ services:
       XEVENT_AUTO_CREATE_SESSION: ${XEVENT_AUTO_CREATE_SESSION:-1}
 
   web:
+    build:
+      context: .
     image: sql-monitor:latest
     restart: unless-stopped
     depends_on:
@@ -45,7 +47,7 @@ services:
       APP_MODE: web
       WEB_HOST: 0.0.0.0
       WEB_PORT: 8000
-      POSTGRES_CONN_STR: host=postgres port=5432 dbname=${POSTGRES_DB:-sql_monitor} user=${POSTGRES_USER:-sql_monitor} password=${POSTGRES_PASSWORD:-sql_monitor}
+      POSTGRES_CONN_STR: ${POSTGRES_CONN_STR:-host=postgres port=5432 dbname=sql_monitor user=sql_monitor password=sql_monitor}
       DASHBOARD_STALE_MINUTES: ${DASHBOARD_STALE_MINUTES:-5}
       DASHBOARD_AUTH_ENABLED: ${DASHBOARD_AUTH_ENABLED:-}
       DASHBOARD_AUTH_USERNAME: ${DASHBOARD_AUTH_USERNAME:-}
