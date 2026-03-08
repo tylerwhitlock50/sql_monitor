@@ -1,0 +1,12 @@
+CREATE INDEX IF NOT EXISTS idx_activity_capture_time ON sqlserver_activity_log (capture_time DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_blocking_session ON sqlserver_activity_log (blocking_session_id);
+CREATE INDEX IF NOT EXISTS idx_activity_elapsed ON sqlserver_activity_log (total_elapsed_ms DESC);
+CREATE INDEX IF NOT EXISTS idx_blocking_capture_time ON sqlserver_blocking_log (capture_time DESC);
+CREATE INDEX IF NOT EXISTS idx_blocking_blocker ON sqlserver_blocking_log (blocking_session_id);
+CREATE INDEX IF NOT EXISTS idx_query_stats_capture_time ON sqlserver_query_stats_log (capture_time DESC);
+CREATE INDEX IF NOT EXISTS idx_query_stats_max_elapsed ON sqlserver_query_stats_log (max_elapsed_ms DESC);
+CREATE INDEX IF NOT EXISTS idx_health_capture_time ON sqlserver_health_counters_log (capture_time DESC);
+CREATE INDEX IF NOT EXISTS idx_xevents_event_time ON sqlserver_xevent_log (event_time DESC);
+CREATE INDEX IF NOT EXISTS idx_xevents_event_name ON sqlserver_xevent_log (event_name, event_time DESC);
+CREATE INDEX IF NOT EXISTS idx_xevents_error_number ON sqlserver_xevent_log (error_number, event_time DESC);
+CREATE INDEX IF NOT EXISTS idx_attempt_attempted_at ON capture_attempt_log (attempted_at DESC);

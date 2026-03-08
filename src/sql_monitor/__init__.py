@@ -1,0 +1,2 @@
+"""SQL Monitor application package."""
+

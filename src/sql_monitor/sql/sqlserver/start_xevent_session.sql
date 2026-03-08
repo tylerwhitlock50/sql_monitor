@@ -1,0 +1,1 @@
+ALTER EVENT SESSION [{session_name}] ON SERVER STATE = START;
