@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SQL Monitor Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="layout">
+    <header class="hero">
+      <h1>SQL Monitor</h1>
+      <p id="generatedAt">Loading...</p>
+      <span id="overallStatus" class="pill">Unknown</span>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Latest Attempt</h2>
+        <div id="latestAttempt" class="kv"></div>
+      </article>
+
+      <article class="card">
+        <h2>Last Hour</h2>
+        <div id="lastHour" class="kv"></div>
+      </article>
+
+      <article class="card">
+        <h2>Last 24 Hours</h2>
+        <div id="lastDay" class="kv"></div>
+      </article>
+
+      <article class="card">
+        <h2>XEvents (1h)</h2>
+        <div id="xevents" class="kv"></div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Problems</h2>
+      <ul id="problems" class="problems"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Recent Blocking</h2>
+      <div id="blocking" class="table-wrap"></div>
+    </section>
+
+    <section class="card">
+      <h2>Timeseries (6h / 5m)</h2>
+      <div id="timeseriesSummary" class="kv"></div>
+      <div id="timeseries" class="table-wrap"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

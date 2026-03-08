@@ -1,0 +1,154 @@
+:root {
+  --bg: #0f1720;
+  --panel: #172634;
+  --panel-2: #1f3347;
+  --text: #ecf4ff;
+  --muted: #9bb1c7;
+  --ok: #2ad27f;
+  --warn: #ffb347;
+  --critical: #ff5f56;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% 0%, #21415e 0%, transparent 35%),
+    radial-gradient(circle at 80% 20%, #293c57 0%, transparent 30%),
+    linear-gradient(135deg, #0d141d 0%, #0f1720 100%);
+}
+
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: 0.04em;
+}
+
+#generatedAt {
+  margin: 0;
+  color: var(--muted);
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pill.ok {
+  background: color-mix(in srgb, var(--ok) 28%, transparent);
+  color: var(--ok);
+}
+
+.pill.warning {
+  background: color-mix(in srgb, var(--warn) 28%, transparent);
+  color: var(--warn);
+}
+
+.pill.critical {
+  background: color-mix(in srgb, var(--critical) 28%, transparent);
+  color: var(--critical);
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: #cde2f8;
+}
+
+.kv {
+  display: grid;
+  gap: 6px;
+}
+
+.kv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.kv-row b {
+  color: var(--text);
+}
+
+.problems {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.problems li {
+  margin-bottom: 6px;
+}
+
+.problem-warning {
+  color: var(--warn);
+}
+
+.problem-critical {
+  color: var(--critical);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.92rem;
+}
+
+th {
+  color: #bad4ee;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .layout {
+    padding: 14px;
+  }
+}
