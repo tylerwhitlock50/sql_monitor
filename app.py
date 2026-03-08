@@ -236,6 +236,13 @@ def fetch_sqlserver_activity(sql_conn):
         results.append(record)
     return results
 
+def _strip_nul(value):
+    """Remove NUL bytes (0x00) that PostgreSQL rejects in string literals."""
+    if isinstance(value, str):
+        return value.replace('\x00', '')
+    return value
+
+
 def insert_into_postgres(pg_conn, rows):
     if not rows:
         return 0
@@ -247,27 +254,27 @@ def insert_into_postgres(pg_conn, rows):
             r.get("session_id"),
             r.get("request_id"),
             r.get("blocking_session_id"),
-            r.get("status"),
-            r.get("command"),
-            r.get("database_name"),
-            r.get("login_name"),
-            r.get("host_name"),
-            r.get("program_name"),
+            _strip_nul(r.get("status")),
+            _strip_nul(r.get("command")),
+            _strip_nul(r.get("database_name")),
+            _strip_nul(r.get("login_name")),
+            _strip_nul(r.get("host_name")),
+            _strip_nul(r.get("program_name")),
             r.get("start_time"),
             r.get("total_elapsed_ms"),
             r.get("cpu_time_ms"),
             r.get("logical_reads"),
             r.get("reads"),
             r.get("writes"),
-            r.get("wait_type"),
+            _strip_nul(r.get("wait_type")),
             r.get("wait_time_ms"),
-            r.get("wait_resource"),
+            _strip_nul(r.get("wait_resource")),
             r.get("open_transaction_count"),
-            r.get("object_schema"),
-            r.get("object_name"),
-            r.get("full_sql_text"),
-            r.get("statement_text"),
-            r.get("input_buffer"),
+            _strip_nul(r.get("object_schema")),
+            _strip_nul(r.get("object_name")),
+            _strip_nul(r.get("full_sql_text")),
+            _strip_nul(r.get("statement_text")),
+            _strip_nul(r.get("input_buffer")),
         ))
 
     with pg_conn.cursor() as cur:
